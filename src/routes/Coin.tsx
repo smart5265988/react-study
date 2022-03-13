@@ -44,7 +44,8 @@ const Header = styled.header`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: #eee;
+  background-color: ${(props) => props.theme.cardBgColor};
+  border: 1px solid #eee;
   padding: 10px 20px;
   border-radius: 10px;
 `;
@@ -76,7 +77,8 @@ const Tab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: #eee;
+  background-color: ${(props) => props.theme.cardBgColor};
+  border: 1px solid #eee;
   border-radius: 10px;
   color: ${(props) =>
     props.isActive ? props.theme.accentColor : props.theme.textColor};

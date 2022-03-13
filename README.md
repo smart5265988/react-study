@@ -7,3 +7,7 @@
 - React Router DOM
 - Apex Charts
 - Typescript
+
+## Api
+
+- https://api.coinpaprika.com/

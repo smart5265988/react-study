@@ -1,6 +1,10 @@
 import { createGlobalStyle } from 'styled-components';
 import Router from './Router';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { ThemeProvider } from 'styled-components';
+import { lightTheme, darkTheme } from './theme';
+import { useRecoilValue } from 'recoil';
+import { isLightAtom } from './atoms';
 
 //스타일드 컴포넌트 전역에 적용될 스타일 글로벌 스타일로 적용
 const GlobalStyle = createGlobalStyle`
@@ -69,12 +73,15 @@ a {
 `;
 
 function App() {
+  const isLight = useRecoilValue(isLightAtom);
   return (
     <>
-      <GlobalStyle />
-      <Router />
-      {/* 리액트 쿼리 데브툴 (웹에서 확인하기 위해서 설치 true로 해야지 보임) */}
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ThemeProvider theme={isLight ? lightTheme : darkTheme}>
+        <GlobalStyle />
+        <Router />
+        {/* 리액트 쿼리 데브툴 (웹에서 확인하기 위해서 설치 true로 해야지 보임) */}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </ThemeProvider>
     </>
   );
 }
