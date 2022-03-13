@@ -6,6 +6,7 @@ import {
   useLocation,
   useParams,
   useRouteMatch,
+  useHistory,
 } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -16,6 +17,7 @@ import Price from './Price';
 const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
+  font-weight: 600;
 `;
 
 const Loader = styled.span`
@@ -24,9 +26,12 @@ const Loader = styled.span`
 `;
 
 const Container = styled.div`
-  padding: 0px 20px;
+  padding: 20px 20px;
   max-width: 480px;
   margin: 0 auto;
+  height: 100vh;
+  border-right: 1px solid #eee;
+  border-left: 1px solid #eee;
 `;
 
 const Header = styled.header`
@@ -39,7 +44,7 @@ const Header = styled.header`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #eee;
   padding: 10px 20px;
   border-radius: 10px;
 `;
@@ -71,7 +76,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #eee;
   border-radius: 10px;
   color: ${(props) =>
     props.isActive ? props.theme.accentColor : props.theme.textColor};
@@ -81,6 +86,11 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
+const Btn = styled.div`
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+`;
 interface RouteParams {
   coinId: string;
 }
@@ -146,6 +156,11 @@ function Coin() {
   const { state } = useLocation<RouteState>();
   const priceMatch = useRouteMatch('/:coinId/price');
   const chartMatch = useRouteMatch('/:coinId/chart');
+  const history = useHistory();
+
+  //useQuery를 사용하면 기존에 쓰던 로딩, 다른 상태들이 필요없고 리액트 쿼리에서 생성된 상태를 사용 가능!
+  // 첫번째 인자는 유니크한 키값 , 두번째는 api 호출 , 3번째는 옵션 ( 현재 사용된 옵션은 5초마다 다시 api 호출)
+  // 리액트 쿼리는 데이터를 캐싱처리 함!! 매우 유용 ( 컴포넌트가 다시 랜더링 될때마다 데이터 요청 하지않는다. (유니크한 키값 정보에 데이터 저장되어잇음))
   const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
     ['info', coinId],
     () => fetchCoinInfo(coinId),
@@ -157,14 +172,20 @@ function Coin() {
       refetchInterval: 5000,
     },
   );
+  // 동일한 로딩이 두개 있기때문에 새롭게 이름을 설정해서 새로 로딩변수 선언
   const loading = infoLoading || tickersLoading;
+  const goBack = () => {
+    history.push('/');
+  };
   return (
     <Container>
+      {/* 리엑트 헬멧을 사용하면 컴포넌트 마다 타이틀 변경 가능  */}
       <Helmet>
         <title>
           {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
         </title>
       </Helmet>
+      <Btn onClick={goBack}>Back</Btn>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
@@ -191,7 +212,7 @@ function Coin() {
           <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
-              <span>Total Suply:</span>
+              <span>Total Supply:</span>
               <span>{tickersData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
@@ -208,10 +229,10 @@ function Coin() {
               <Link to={`/${coinId}/price`}>Price</Link>
             </Tab>
           </Tabs>
-
+          {/* 라우팅안에서 새로운 라우팅으로 컴포넌트 불러오기 */}
           <Switch>
             <Route path={`/:coinId/price`}>
-              <Price />
+              <Price coinId={coinId} />
             </Route>
             <Route path={`/:coinId/chart`}>
               <Chart coinId={coinId} />

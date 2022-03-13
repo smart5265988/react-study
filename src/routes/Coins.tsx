@@ -1,13 +1,15 @@
-import { Helmet } from "react-helmet";
-import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { fetchCoins } from "../api";
+import { Helmet } from 'react-helmet';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { fetchCoins } from '../api';
 
 const Container = styled.div`
   padding: 0px 20px;
   max-width: 480px;
   margin: 0 auto;
+  border-right: 1px solid #eee;
+  border-left: 1px solid #eee;
 `;
 
 const Header = styled.header`
@@ -17,13 +19,19 @@ const Header = styled.header`
   align-items: center;
 `;
 
-const CoinsList = styled.ul``;
+const CoinsList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+`;
 
 const Coin = styled.li`
-  background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  width: 40%;
+  background-color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
+  background-color: #eee;
   a {
     display: flex;
     align-items: center;
@@ -40,6 +48,7 @@ const Coin = styled.li`
 const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
+  font-weight: 600;
 `;
 
 const Loader = styled.span`
@@ -64,14 +73,14 @@ interface ICoin {
 }
 
 function Coins() {
-  const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
+  const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins);
   return (
     <Container>
       <Helmet>
-        <title>코인</title>
+        <title>Coin</title>
       </Helmet>
       <Header>
-        <Title>코인</Title>
+        <Title>Coin</Title>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
@@ -81,14 +90,14 @@ function Coins() {
             <Coin key={coin.id}>
               <Link
                 to={{
-                  pathname: `/${coin.id}`,
+                  pathname: `/${coin.id}/chart`,
                   state: { name: coin.name },
                 }}
               >
                 <Img
                   src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
                 />
-                {coin.name} &rarr;
+                {coin.name}
               </Link>
             </Coin>
           ))}

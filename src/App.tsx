@@ -1,7 +1,8 @@
-import { createGlobalStyle } from "styled-components";
-import Router from "./Router";
-import { ReactQueryDevtools } from "react-query/devtools";
+import { createGlobalStyle } from 'styled-components';
+import Router from './Router';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
+//스타일드 컴포넌트 전역에 적용될 스타일 글로벌 스타일로 적용
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -72,7 +73,8 @@ function App() {
     <>
       <GlobalStyle />
       <Router />
-      <ReactQueryDevtools initialIsOpen={true} />
+      {/* 리액트 쿼리 데브툴 (웹에서 확인하기 위해서 설치 true로 해야지 보임) */}
+      <ReactQueryDevtools initialIsOpen={false} />
     </>
   );
 }

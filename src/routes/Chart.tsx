@@ -1,6 +1,6 @@
-import { useQuery } from "react-query";
-import { fetchCoinHistory } from "../api";
-import ApexChart from "react-apexcharts";
+import { useQuery } from 'react-query';
+import { fetchCoinHistory } from '../api';
+import ApexChart from 'react-apexcharts';
 
 interface IHistorical {
   time_open: string;
@@ -17,28 +17,28 @@ interface ChartProps {
 }
 function Chart({ coinId }: ChartProps) {
   const { isLoading, data } = useQuery<IHistorical[]>(
-    ["ohlcv", coinId],
+    ['ohlcv', coinId],
     () => fetchCoinHistory(coinId),
     {
       refetchInterval: 10000,
-    }
+    },
   );
   return (
     <div>
       {isLoading ? (
-        "Loading chart..."
+        'Loading chart...'
       ) : (
         <ApexChart
           type="line"
           series={[
             {
-              name: "Price",
-              data: data?.map((price) => price.close),
+              name: 'Price',
+              data: data?.map((price) => price.close.toFixed(2)),
             },
           ]}
           options={{
             theme: {
-              mode: "dark",
+              mode: 'light',
             },
             chart: {
               height: 300,
@@ -46,28 +46,28 @@ function Chart({ coinId }: ChartProps) {
               toolbar: {
                 show: false,
               },
-              background: "transparent",
+              background: 'transparent',
             },
-            grid: { show: false },
+            grid: { show: true },
             stroke: {
-              curve: "smooth",
+              curve: 'smooth',
               width: 4,
             },
             yaxis: {
-              show: false,
+              show: true,
             },
             xaxis: {
-              axisBorder: { show: false },
-              axisTicks: { show: false },
-              labels: { show: false },
-              type: "datetime",
+              axisBorder: { show: true },
+              axisTicks: { show: true },
+              labels: { show: true },
+              type: 'datetime',
               categories: data?.map((price) => price.time_close),
             },
             fill: {
-              type: "gradient",
-              gradient: { gradientToColors: ["#0be881"], stops: [0, 100] },
+              type: 'gradient',
+              gradient: { gradientToColors: ['#0be881'], stops: [0, 100] },
             },
-            colors: ["#0fbcf9"],
+            colors: ['#0fbcf9'],
             tooltip: {
               y: {
                 formatter: (value) => `$${value.toFixed(2)}`,

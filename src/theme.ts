@@ -1,7 +1,7 @@
-import { DefaultTheme } from "styled-components";
-
+import { DefaultTheme } from 'styled-components';
+//필요한 테마 정보 설정
 export const theme: DefaultTheme = {
-  bgColor: "#2f3640",
-  textColor: "#f5f6fa",
-  accentColor: "#9c88ff",
+  bgColor: '#fff',
+  textColor: '#000',
+  accentColor: '#9c88ff',
 };
